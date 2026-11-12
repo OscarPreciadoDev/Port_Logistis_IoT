@@ -122,7 +122,7 @@
 
     <main>
 
-        <h2>Docuementos</h2>
+        <h2>Documentos</h2>
 
         <div class="controles">
 
@@ -134,9 +134,9 @@
 
             <select id="categoria">
                 <option value="Todas">Todas las etapas de desarrollo</option>
-                <option value="Informes">Semana 1</option>
-                <option value="Proyectos">Semana 2</option>
-                <option value="Académicos">Semana 3</option>
+                <option value="Semana 1">Semana 1</option>
+                <option value="Semana 2">Semana 2</option>
+                <option value="Semana 3">Semana 3</option>
             </select>
 
         </div>
@@ -169,29 +169,25 @@
 
     <script>
 
-        // Catálogo de documentos
+        // Catálogo de documentos.
+        // La categoría (Semana 1, 2, 3) se deduce del prefijo del archivo: S1_, S2_, S3_
         const documentos = [
-            {
-                nombre: "Informe general",
-                categoria: "Informes",
-                archivo: "documentos/informe.pdf"
-            },
-            {
-                nombre: "Proyecto principal",
-                categoria: "Proyectos",
-                archivo: "documentos/proyecto.pdf"
-            },
-            {
-                nombre: "Documento académico",
-                categoria: "Académicos",
-                archivo: "documentos/documento3.pdf"
-            },
-            {
-                nombre: "Informe complementario",
-                categoria: "Informes",
-                archivo: "documentos/documento4.pdf"
-            }
-        ];
+            { nombre: "Texto inicial (caso de estudio)",           archivo: "documentos/S1_Texto_Inicial.pdf" },
+            { nombre: "Entrevista de elicitación",                 archivo: "documentos/S1_Entrevista_Elicitacion.pdf" },
+            { nombre: "SRS – Especificación de requisitos",        archivo: "documentos/S1_SRS.pdf" },
+
+            { nombre: "Historias de usuario",                      archivo: "documentos/S2_HU.pdf" },
+            { nombre: "Casos de uso",                              archivo: "documentos/S2_CU.pdf" },
+            { nombre: "Tabla de roles y conjunto real",            archivo: "documentos/S2_TR_CR.pdf" },
+
+            { nombre: "Verificación y validación de requisitos (Walkthrough y RTM)", archivo: "documentos/S3_VE_VA_WT.pdf" },
+            { nombre: "Verificación y validación de casos de uso (Walkthrough y RTM)", archivo: "documentos/S3_VA_CU.pdf" }
+        ].map(doc => {
+            const nombreArchivo = doc.archivo.split("/").pop();
+            const m = nombreArchivo.match(/^S(\d+)_/i);
+            doc.categoria = m ? "Semana " + m[1] : "Sin categoría";
+            return doc;
+        });
 
         const lista = document.getElementById("listaDocumentos");
         const busqueda = document.getElementById("busqueda");
@@ -244,14 +240,14 @@
         // Abrir PDF en el visor
         function abrirPDF(doc) {
 
-            document.getElementById("visorPDF").src = doc.archivo;
+            document.getElementById("visorPDF").src = encodeURI(doc.archivo);
 
             document.getElementById("nombreDocumento").textContent =
                 doc.nombre;
 
             const descargar = document.getElementById("descargar");
 
-            descargar.href = doc.archivo;
+            descargar.href = encodeURI(doc.archivo);
             descargar.hidden = false;
 
         }
