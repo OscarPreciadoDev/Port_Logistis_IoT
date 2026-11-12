@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Port Logistics IoT</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f5f8;
+            color: #26364a;
+        }
+
+        header {
+            background: #172b46;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .controles {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        input, select {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        input {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .documentos {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+        }
+
+        .tarjeta {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e0e4e9;
+        }
+
+        .tarjeta h3 {
+            margin-top: 10px;
+        }
+
+        .pdf-icono {
+            font-size: 35px;
+        }
+
+        button {
+            background: #263f60;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background: #41668f;
+        }
+
+        .visor {
+            margin-top: 40px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 650px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .descargar {
+            display: inline-block;
+            margin-bottom: 12px;
+            color: #263f60;
+        }
+
+        @media (max-width: 600px) {
+            iframe {
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Port Logistics IoT</h1>
+        <p>Repositorio de documentos y recursos </p>
+    </header>
+
+    <main>
+
+        <h2>Docuementos</h2>
+
+        <div class="controles">
+
+            <input
+                type="text"
+                id="busqueda"
+                placeholder="Buscar documento..."
+            >
+
+            <select id="categoria">
+                <option value="Todas">Todas las etapas de desarrollo</option>
+                <option value="Informes">Semana 1</option>
+                <option value="Proyectos">Semana 2</option>
+                <option value="Académicos">Semana 3</option>
+            </select>
+
+        </div>
+
+        <div class="documentos" id="listaDocumentos"></div>
+
+        <section class="visor">
+
+            <h2>Vista previa</h2>
+
+            <p id="nombreDocumento">
+                Selecciona un documento para visualizarlo.
+            </p>
+
+            <a
+                id="descargar"
+                class="descargar"
+                href="#"
+                download
+                hidden
+            >
+                Descargar documento
+            </a>
+
+            <iframe id="visorPDF"></iframe>
+
+        </section>
+
+    </main>
+
+    <script>
+
+        // Catálogo de documentos
+        const documentos = [
+            {
+                nombre: "Informe general",
+                categoria: "Informes",
+                archivo: "documentos/informe.pdf"
+            },
+            {
+                nombre: "Proyecto principal",
+                categoria: "Proyectos",
+                archivo: "documentos/proyecto.pdf"
+            },
+            {
+                nombre: "Documento académico",
+                categoria: "Académicos",
+                archivo: "documentos/documento3.pdf"
+            },
+            {
+                nombre: "Informe complementario",
+                categoria: "Informes",
+                archivo: "documentos/documento4.pdf"
+            }
+        ];
+
+        const lista = document.getElementById("listaDocumentos");
+        const busqueda = document.getElementById("busqueda");
+        const categoria = document.getElementById("categoria");
+
+        // Mostrar documentos
+        function mostrarDocumentos() {
+
+            lista.innerHTML = "";
+
+            const texto = busqueda.value.toLowerCase();
+
+            const seleccion = categoria.value;
+
+            const filtrados = documentos.filter(doc => {
+
+                return doc.nombre.toLowerCase().includes(texto)
+                    && (seleccion === "Todas"
+                    || doc.categoria === seleccion);
+
+            });
+
+            filtrados.forEach(doc => {
+
+                const tarjeta = document.createElement("div");
+
+                tarjeta.className = "tarjeta";
+
+                tarjeta.innerHTML = `
+                    <div class="pdf-icono">📄</div>
+                    <h3>${doc.nombre}</h3>
+                    <p>${doc.categoria}</p>
+                    <button>Visualizar PDF</button>
+                `;
+
+                tarjeta.querySelector("button").addEventListener(
+                    "click",
+                    () => abrirPDF(doc)
+                );
+
+                lista.appendChild(tarjeta);
+
+            });
+
+            if (filtrados.length === 0) {
+                lista.textContent = "No se encontraron documentos.";
+            }
+        }
+
+        // Abrir PDF en el visor
+        function abrirPDF(doc) {
+
+            document.getElementById("visorPDF").src = doc.archivo;
+
+            document.getElementById("nombreDocumento").textContent =
+                doc.nombre;
+
+            const descargar = document.getElementById("descargar");
+
+            descargar.href = doc.archivo;
+            descargar.hidden = false;
+
+        }
+
+        busqueda.addEventListener("input", mostrarDocumentos);
+
+        categoria.addEventListener("change", mostrarDocumentos);
+
+        // Cargar catálogo inicial
+        mostrarDocumentos();
+
+    </script>
+
+</body>
+</html>
