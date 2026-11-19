@@ -28,6 +28,6 @@ window.CATALOGO = [
     { nombre: "Diagrama de timing", archivo: "documentos/13.Diagrama de Timing.png", icono: "timing", semana: "Semana 2" },
     { nombre: "Diagrama de visión general de interacción", archivo: "documentos/14.Diagrama de Vision General de Interaccion.png", icono: "interaccion", semana: "Semana 2" },
 
-    { nombre: "Acta CCB", archivo: "documentos/Acta_CCB_PortLogistics_IoT.docx", icono: "srs", semana: null },
+    { nombre: "Acta CCB – Control de cambios (RFC-01 y RFC-02)", archivo: "documentos/S4_CCB_V2.pdf", icono: "escudo", semana: "Semana 4" },
     { nombre: "Contexto del caso", archivo: "documentos/Contexto.zip", icono: "paquetes", semana: null }
 ];
